@@ -32,6 +32,16 @@ export function useCreateAnnouncement() {
 
   return useMutation<ApiResponse<Announcement>, Error, CreateAnnouncementInput>({
     mutationFn: async (_input) => {
+      if (!_input.title) {
+        throw new Error("Title is required");
+      }
+      if (!_input.content || _input.content.length > 200) {
+        throw new Error("Content is required and must be 200 characters or fewer.");
+      }
+      if (!_input.target_role || _input.target_role === "student" || _input.target_role === "lecturer" || _input.target_role === "all") {
+        throw new Error("Target role is required and must be one of: student, lecturer, all.");
+      }
+
       return apiPost<ApiResponse<Announcement>>("/announcements", _input);
     },
     onSuccess: () => {

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAnnouncements } from "../api/announcements";
-import type { TargetRole } from "../types";
+import type { TargetRole, Announcement } from "../types";
+
 
 // TODO(candidate): implement this component.
 //
@@ -21,7 +22,7 @@ export function AnnouncementList() {
   const [targetRole, setTargetRole] = useState<TargetRole | "">("");
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<Announcement[]>([]);
 
   // Wire this up once useAnnouncements is implemented.
   void search;
@@ -29,8 +30,8 @@ export function AnnouncementList() {
   void page;
   void size;
 
-  useEffect(() => {
-    setData(useAnnouncements({ search, targetRole, page, size }));
+  useEffect(async () => {
+    setData(await useAnnouncements({ search, targetRole, page, size }));
 
     return () => {
       setData([]);

@@ -18,26 +18,25 @@ export function AnnouncementForm() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [targetRole, setTargetRole] = useState<TargetRole>("all");
-  const handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const handleSubmit = async (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    useCreateAnnouncement().mutate({
+    setIsButtonDisabled(true);
+    await useCreateAnnouncement().mutate({
       title,
       content,
       target_role: targetRole,
-    });
+    })
 
     setTitle("");
     setContent("");
     setTargetRole("all");
+    setIsButtonDisabled(false);
   }
 
   void title;
   void content;
   void targetRole;
-
-  useEffect(() => {
-    
-  }, []);
 
   return <div>
     <form>
@@ -47,7 +46,7 @@ export function AnnouncementForm() {
         <option value="lecturer">Lecturer</option>
         <option value="all">All</option>
       </select>
-      <button type="submit" onClick={handleSubmit}>
+      <button type="submit" onClick={handleSubmit} disabled={isButtonDisabled}>
         Submit
       </button>
     </form>
